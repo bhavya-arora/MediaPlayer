@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         mediaPlayer.pause();
                         enabled();
-                        ///////we are setting ispaused to true/////////
+                        ///////we are setting ispaused to true//////////
                         isPaused = true;
                         new CountDownTimer(remainingTime, 1000) {
                             @Override
