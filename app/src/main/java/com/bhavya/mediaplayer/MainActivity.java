@@ -33,12 +33,7 @@ public class MainActivity extends AppCompatActivity {
     Button pauseButton;
     TextView time;
     TextView leftTime;
-    int a =157;
-    int counter=0;
-    static int min=0;
-    private static int count=0;
     long duration;
-    int check = 0;
     boolean isPaused=false;
     boolean isCanceled=false;
     long remainingTime=0;
@@ -47,7 +42,12 @@ public class MainActivity extends AppCompatActivity {
     long second;
     long seconds;
     long minute=0;
-    Handler handler=new Handler(){
+    /*int a =157;
+    int counter=0;
+    static int min=0;
+    private static int count=0;
+    int check = 0;*/
+   /* Handler handler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
             }
             count++;
         }
-    };
+    };*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,32 +75,42 @@ public class MainActivity extends AppCompatActivity {
         time=(TextView) findViewById(R.id.time);
         leftTime=(TextView) findViewById(R.id.leftTime);
         pauseButton.setEnabled(false);
-
+           /////Media Player Object//////////////////////
         final MediaPlayer mediaPlayer=MediaPlayer.create(this,R.raw.music);
-
+         ///////////Duration of song in milliseconds//////////in this case its 157048////
         duration=mediaPlayer.getDuration();
+        /////////We are converting milliseconds in seconds//////in this case its 157 seconds///////
         second=duration/1000;
+        ////////remainingTime and durtion both are global variables///////
+        /////its like 0=157048///////////////////
         remainingTime=duration;
+        ////////////PlayButton onclick listener///////
         playButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         mediaPlayer.start();
                         Log.i(TAG, "Duration is"+duration);
+                        //////This will set the totaltime of song which is on right side of buttons//////////
                         setTime();
+                        /////////This will check if one button is enabled switch off the other one////////
                         enabled();
                         isCanceled=false;
                         isPaused=false;
                         new CountDownTimer(remainingTime,1000){
+                            ///////THIS method call after every 1 second/////////
                             @Override
                             public void onTick(long millisUntilFinished) {
                                 if(isPaused || isCanceled){
                                     cancel();
                                 }
                                 else{
+                                    ////This millisecond variable value will change after every 1 second/////
                                     String setTime=String.valueOf(millisUntilFinished/1000);
                                     Log.i(TAG, "second is"+second);
+                                    /////This millis variable value decreasing after every one second////
                                     long millis=millisUntilFinished/1000;
+                                    ///////At first time its like 157-157////after 1 second its 157-156/////
                                     seconds=second-millis;
                                     Log.i(TAG, "onTick: "+seconds);
                                     if(seconds==60){
@@ -114,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
                                     remainingTime=millisUntilFinished;
                                 }
                             }
-
+            ////////when millisuntilfinished reach to 0 seconds this method will call/////////
                             @Override
                             public void onFinish() {
                                 leftTime.setText("Finished");
@@ -128,17 +138,19 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
-
+//////////////This is when pause button is clicked//////////////
         pauseButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         mediaPlayer.pause();
                        enabled();
+                        ///////we are setting ispaused to true/////////
                         isPaused=true;
                         new CountDownTimer(remainingTime,1000){
                             @Override
                             public void onTick(long millisUntilFinished) {
+                                ////Now if statement is execute and this will cancel the countdown///////or pause countdown///
                                 if(isPaused || isCanceled){
                                     cancel();
                                     Log.i(TAG, "remainingTime "+remainingTime);
